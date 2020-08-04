@@ -16,9 +16,9 @@ from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
 
 #basic info
-folderPath = r"C:\Users\wloeffler\Downloads\11 Sample PDF split_Utility2_Output\12900"
+folderPath = r"C:\Users\wloeffler\Downloads\11 Sample PDF split_Utility2_Output"
 #charsToRemove =['1','2','3','4','5','6','7','8','9','0']
-
+filepathDirs = ['1816','2840','5585','12900','43076', '115066','146208','161649','166591','839624','1000139']
 
 
 def capitalizeFirstLetterofAllWords(stringInput):
@@ -32,7 +32,7 @@ def convert_pdf_to_txt(path):
     retstr = io.StringIO()
     codec = 'utf-8'
     laparams = LAParams()
-    device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
+    device = TextConverter(rsrcmgr, retstr, laparams=laparams)
     fp = open(path, 'rb')
     interpreter = PDFPageInterpreter(rsrcmgr, device)
     password = ""
@@ -55,39 +55,45 @@ def convert_pdf_to_txt(path):
 
 
 
-#gets the local file name
-fileNames = os.listdir(folderPath)
-
-#gets the full file path
-fullFilePath = [os.path.join(folderPath +'\\', x) for x in fileNames]
-print(str(fullFilePath[1]))
-
-#the stripper ;)
-strippedFileNames = list()
-for file in fileNames:
-    temp = Path(file).with_suffix("")
-    temp = str(temp)
-    temp = temp.split("_")
-
-    #accounts for non dated ones
-    if '-' not in temp[-1]:
-        info1 = "Section : "+ temp[1].lower()
-        info1 = capitalizeFirstLetterofAllWords(info1)
-        strippedFileNames.append(info1)
-
-    #for non dated ones
-    else:
-        encounterInfo = temp[-2] +': '+ temp[-1]
-        encounterInfo = encounterInfo.replace('-','/')
-        encounterInfo = capitalizeFirstLetterofAllWords(encounterInfo)
-        strippedFileNames.append(encounterInfo)
 
 
-#pdf checker part
-for x in range(0,strippedFileNames.__len__()):
+for filefolder in filepathDirs:
 
-    pdfObject = PyPDF4.PdfFileReader(str(fullFilePath[x]))
-    stringToSearchFor = strippedFileNames[x]
+    # gets the local file name
+    fileNames = os.listdir(folderPath + '\\' + filefolder)
+    #gets the full file path
+    fullFilePath = [os.path.join(folderPath +'\\' + filefolder+ '\\', x) for x in fileNames]
+    #print(str(fullFilePath))
 
-    #searches each page for the string
-    text = convert_pdf_to_txt()
+    #the stripper ;)
+    strippedFileNames = list()
+    for file in fileNames:
+        temp = Path(file).with_suffix("")
+        temp = str(temp)
+        temp = temp.split("_")
+
+        #accounts for non dated ones
+        if '-' not in temp[-1]:
+            info1 = "Section : "+ temp[1].lower()
+            info1 = capitalizeFirstLetterofAllWords(info1)
+            strippedFileNames.append(info1)
+
+        #for non dated ones
+        else:
+            encounterInfo = temp[-2] +': '+ temp[-1]
+            encounterInfo = encounterInfo.replace('-','/')
+            encounterInfo = capitalizeFirstLetterofAllWords(encounterInfo)
+            strippedFileNames.append(encounterInfo)
+
+
+    #pdf checker part
+    for x in range(0,strippedFileNames.__len__()):
+
+        pdfObject = PyPDF4.PdfFileReader(str(fullFilePath[x]))
+        stringToSearchFor = strippedFileNames[x]
+        #searches each page for the string
+        text = convert_pdf_to_txt(fullFilePath[x])
+        for y in range(0,strippedFileNames.__len__()):
+            if strippedFileNames[y] in text and strippedFileNames[y] != stringToSearchFor:
+                print("error in file " + strippedFileNames[x] + "\n it contains "+ strippedFileNames[y])
+    print(filefolder)
