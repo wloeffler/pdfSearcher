@@ -1,5 +1,9 @@
 '''
 This will scan documents in a dir for a string contained within its document title
+
+This is specifc to HTML to PDF files that has been worked on ... the stuff is for the naming convention used
+
+
 Picuture Perfect 2020
 '''
 
