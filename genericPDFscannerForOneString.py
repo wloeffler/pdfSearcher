@@ -18,7 +18,7 @@ from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
 
 #basic info
-folderPath = r"C:\Users\wloeffler\Downloads\home\biblen"
+folderPath = r"C:\Users\wloeffler\Downloads\nbCITI_MRN385548\home\biblen"
 #charsToRemove =['1','2','3','4','5','6','7','8','9','0']
 #filepathDirs = ['1816','2840','5585','12900','43076', '115066','146208','161649','166591','839624','1000139']
 
@@ -57,7 +57,7 @@ def convert_pdf_to_txt(path):
 
 
 
-badString = "01/01/2000"
+badString = "Verify Patient Status/Charges"
 
 
 # gets the local file name
