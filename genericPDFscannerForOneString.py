@@ -76,3 +76,6 @@ for x in range(0,fullFilePath.__len__()):
     if badString in text:
         print("error in file " + fileNames[x] + "\n it contains "+ badString)
 
+
+
+print('---done---')
